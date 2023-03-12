@@ -32,10 +32,6 @@ export class AuthService {
 	) {
 	}
 
-	async getHello(){
-		return this.authRepository.find()
-	}
-
 	async register({username, password, last_name, first_name, email}: RegisterDto): Promise<RegisterResponseDto> {
 		const candidate = await this.authRepository.findOne({where: {username}})
 		if (candidate) {
@@ -188,7 +184,7 @@ export class AuthService {
 		return {...tokens, user: userDto}
 	}
 
-	async responseProfile(user: ProfileUserDto) {
+	async responseProfile(user: ProfileUserDto): Promise<ProfileDto> {
 		const candidate = await this.profileRepository.findOne({where: {authId: user.id}})
 		if (!candidate.username && !candidate.first_name && !candidate.last_name) {
 			throw new HttpException('Профиль еще не создан!', HttpStatus.BAD_REQUEST)

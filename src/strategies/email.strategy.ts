@@ -6,7 +6,7 @@ import {ExtractJwt, Strategy} from "passport-jwt";
 export class EmailStrategy extends PassportStrategy(Strategy, 'jwt_email') {
 	constructor() {
 		super({
-			jwtFromRequest: ExtractJwt.fromUrlQueryParameter('jwt_email'),
+			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			secretOrKey: process.env.SECRET_MAIL_KEY,
 			ignoreExpiration: false,
 			passReqToCallback: true

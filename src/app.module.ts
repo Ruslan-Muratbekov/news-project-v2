@@ -9,6 +9,9 @@ import {AuthEntity} from "./auth/entity/auth.entity";
 import {EmailEntity} from "./auth/entity/email.entity";
 import {PasswordEntity} from "./auth/entity/password.entity";
 import {ProfileEntity} from "./auth/entity/profile.entity";
+import {TagsEntity} from "./tags/entity/tags.entity";
+import {NewsEntity} from "./news/entity/news.entity";
+import {CategoryEntity} from "./categories/entity/category.entity";
 
 @Module({
 	imports: [
@@ -20,7 +23,7 @@ import {ProfileEntity} from "./auth/entity/profile.entity";
 			username: process.env.DB_USERNAME,
 			password: process.env.DB_PASSWORD,
 			database: process.env.DB_DATABASE,
-			entities: [AuthEntity, EmailEntity, PasswordEntity, ProfileEntity],
+			entities: [AuthEntity, EmailEntity, PasswordEntity, ProfileEntity, TagsEntity, NewsEntity, CategoryEntity],
 			synchronize: true,
 		}),
 		AuthModule,

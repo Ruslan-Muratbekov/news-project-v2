@@ -1,6 +1,13 @@
+import {ApiProperty} from "@nestjs/swagger";
+
 export class ProfileDto {
+	@ApiProperty()
 	username: string;
+
+	@ApiProperty()
 	first_name: string;
+
+	@ApiProperty()
 	last_name: string;
 
 	constructor(model) {
@@ -19,13 +26,23 @@ export class ProfileUserDto {
 }
 
 export class CreateProfileDto {
+	@ApiProperty()
 	username: string;
+
+	@ApiProperty()
 	first_name: string;
+
+	@ApiProperty()
 	last_name: string;
 }
 
 export class UpdateProfileDto {
+	@ApiProperty()
 	username: string;
+
+	@ApiProperty()
 	first_name: string;
+
+	@ApiProperty()
 	last_name: string;
 }

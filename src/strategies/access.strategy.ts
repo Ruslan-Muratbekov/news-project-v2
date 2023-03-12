@@ -8,11 +8,15 @@ export class AccessStrategy extends PassportStrategy(Strategy, 'jwt_access') {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			secretOrKey: process.env.SECRET_ACCESS_KEY,
-			ignoreExpiration: false
+			ignoreExpiration: false,
+			passReqToCallback: true
 		});
 	}
 
-	private validate(payload) {
-		return payload
+	private validate(req, payload) {
+		return {
+			...payload,
+			jwt: req.query.jwt_refresh
+		}
 	}
 }

@@ -11,78 +11,101 @@ import {EmailGuards} from "../common/guards/email.guards";
 import {RefreshGuards} from "../common/guards/refresh.guards";
 import {VerifyEmailResponseDto} from "./dto/verifyEmail.dto";
 import {UpdateTokenResponseDto} from "./dto/updateToken.dto";
-import {CreateProfileDto, UpdateProfileDto} from "./dto/profile.dto";
+import {CreateProfileDto, ProfileDto, UpdateProfileDto} from "./dto/profile.dto";
+import {ApiBearerAuth, ApiBody, ApiResponse, ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {
 	}
 
-	@Get()
-	getHello() {
-		return this.authService.getHello()
-	}
-
 	@Post('register')
+	@ApiBody({type: RegisterDto})
+	@ApiResponse({status: 200, type: RegisterResponseDto})
 	async register(@Body() data: RegisterDto): Promise<RegisterResponseDto> {
 		return this.authService.register(data)
 	}
 
 	@Post('login')
+	@ApiBody({type: LoginDto})
+	@ApiResponse({status: 200, type: LoginResponseDto})
 	async login(@Body() data: LoginDto): Promise<LoginResponseDto> {
 		return this.authService.login(data)
 	}
 
 	@Post('send-reset-password-link')
+	@ApiBody({type: SendResetPasswordLinkDto})
+	@ApiResponse({status: 200, type: SendResetPasswordLinkDto})
 	async sendResetPasswordLink(@Body() data: SendResetPasswordLinkDto): Promise<SendResetPasswordLinkDto> {
 		return this.authService.sendResetPassword(data)
 	}
 
-	@UseGuards(PasswordGuards)
 	@Post('change-password')
+	@ApiBearerAuth('jwt_password')
+	@UseGuards(PasswordGuards)
+	@ApiBody({type: ChangePasswordDto})
+	@ApiResponse({status: 200, type: ChangePasswordDto})
 	changePassword(@Body() data: ChangePasswordDto, @Req() req): Promise<ChangePasswordDto> {
 		return this.authService.changePassword(data, req.user)
 	}
 
-	@UseGuards(AccessGuards)
 	@Post('register-email')
+	@ApiBearerAuth('jwt_access')
+	@UseGuards(AccessGuards)
+	@ApiBody({type: RegisterEmailDto})
+	@ApiResponse({status: 200, type: RegisterEmailDto})
 	registerEmail(@Body() data: RegisterEmailDto, @Req() req): Promise<RegisterEmailDto> {
 		return this.authService.registerEmail(data, req.user)
 	}
 
+	@Post('verify-email')
+	@ApiBearerAuth('jwt_email')
 	@UseGuards(EmailGuards)
-	@Get('verify-email')
+	@ApiResponse({status: 200, type: VerifyEmailResponseDto})
 	async verifyEmail(@Req() req): Promise<VerifyEmailResponseDto> {
 		return this.authService.verifyEmail(req.user)
 	}
 
-	@UseGuards(RefreshGuards)
 	@Post('logout')
+	@ApiBearerAuth('jwt_refresh')
+	@UseGuards(RefreshGuards)
 	async logout(@Req() req): Promise<void> {
 		return this.authService.logout(req.user)
 	}
 
-	@UseGuards(RefreshGuards)
 	@Post('updateToken')
+	@ApiBearerAuth('jwt_refresh')
+	@UseGuards(RefreshGuards)
+	@ApiResponse({status: 200, type: UpdateTokenResponseDto})
 	async updateToken(@Req() req): Promise<UpdateTokenResponseDto> {
 		return this.authService.updateToken(req.user)
 	}
 
-	@UseGuards(AccessGuards)
 	@Get('profile')
-	async responseProfile(@Req() req) {
+	@ApiBearerAuth('jwt_access')
+	@UseGuards(AccessGuards)
+	@ApiResponse({status: 200, type: ProfileDto})
+	async responseProfile(@Req() req): Promise<ProfileDto> {
 		return this.authService.responseProfile(req.user)
 	}
 
-	@UseGuards(AccessGuards)
 	@Post('profile')
+	@ApiBearerAuth('jwt_access')
+	@UseGuards(AccessGuards)
+	@ApiResponse({status: 200, type: CreateProfileDto})
+	@ApiBody({type: CreateProfileDto})
 	async createProfile(@Req() req, @Body() data: CreateProfileDto): Promise<CreateProfileDto> {
 		return this.authService.createProfile(req.user, data)
 	}
 
-	@UseGuards(AccessGuards)
 	@Put('profile')
+	@ApiBearerAuth('jwt_access')
+	@UseGuards(AccessGuards)
+	@ApiBody({type: UpdateProfileDto})
+	@ApiResponse({status: 200, type: UpdateProfileDto})
 	async updateProfile(@Req() req, @Body() data: UpdateProfileDto): Promise<UpdateProfileDto> {
+		console.log(req)
 		return this.authService.updateProfile(req.user, data)
 	}
 }

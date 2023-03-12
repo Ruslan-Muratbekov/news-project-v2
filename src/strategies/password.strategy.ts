@@ -11,7 +11,7 @@ export class PasswordStrategy extends PassportStrategy(Strategy, 'jwt_password')
 		@InjectRepository(PasswordEntity) private readonly passwordRepository: Repository<PasswordEntity>
 	) {
 		super({
-			jwtFromRequest: ExtractJwt.fromUrlQueryParameter('jwt_password'),
+			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			secretOrKey: process.env.SECRET_PASSWORD_KEY,
 			ignoreExpiration: false,
 			passReqToCallback: true

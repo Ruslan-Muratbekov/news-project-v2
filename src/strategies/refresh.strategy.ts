@@ -6,7 +6,7 @@ import {ExtractJwt, Strategy} from "passport-jwt";
 export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh') {
 	constructor() {
 		super({
-			jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
+			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			secretOrKey: process.env.SECRET_REFRESH_KEY,
 			ignoreExpiration: false,
 			passReqToCallback: true
@@ -16,7 +16,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh') {
 	private validate(req, payload) {
 		return {
 			...payload,
-			refreshToken: req.body.refreshToken
+			refreshToken: req.query.jwt_refresh
 		}
 	}
 }
