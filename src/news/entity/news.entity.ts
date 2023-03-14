@@ -23,7 +23,7 @@ export class NewsEntity {
 	title: string
 
 	@ApiProperty({required: false})
-	@Column()
+	@Column({nullable: false})
 	image: string
 
 	@ApiProperty()
@@ -35,7 +35,7 @@ export class NewsEntity {
 	content: string
 
 	@ApiProperty({required: false})
-	@Column()
+	@Column({nullable: true})
 	views: string
 
 	@ApiProperty({required: false})
