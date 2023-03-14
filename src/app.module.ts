@@ -12,9 +12,14 @@ import {ProfileEntity} from "./auth/entity/profile.entity";
 import {TagsEntity} from "./tags/entity/tags.entity";
 import {NewsEntity} from "./news/entity/news.entity";
 import {CategoryEntity} from "./categories/entity/category.entity";
+import {ServeStaticModule} from "@nestjs/serve-static";
+import {join} from 'path'
 
 @Module({
 	imports: [
+		ServeStaticModule.forRoot({
+			rootPath: join(__dirname, '..', 'uploads'),
+		}),
 		ConfigModule.forRoot({isGlobal: true}),
 		TypeOrmModule.forRoot({
 			type: 'postgres',

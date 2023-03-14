@@ -5,7 +5,8 @@ import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 async function bootstrap() {
 	const PORT = process.env.PORT
 
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule, {cors: false});
+
 	const config = new DocumentBuilder()
 		.setTitle('News project')
 		.setDescription('Новостной портал')
@@ -57,9 +58,10 @@ async function bootstrap() {
 		)
 		.build();
 	const document = SwaggerModule.createDocument(app, config);
-	SwaggerModule.setup('', app, document);
+	SwaggerModule.setup('/swagger', app, document);
 
 	await app.listen(PORT, () => console.log(`Server started on URL http://localhost:${PORT}`));
+
 }
 
 bootstrap();

@@ -13,7 +13,7 @@ export class CategoryEntity {
 	count: number
 
 	@ApiProperty({required: true})
-	@Column()
+	@Column({unique: true})
 	title: string
 
 	@ApiProperty({required: false})
