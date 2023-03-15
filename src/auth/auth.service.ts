@@ -100,7 +100,7 @@ export class AuthService {
 
 		await this.sendResetPasswordLink(
 			candidate.email,
-			`${process.env.API_URL}/api/auth/change-password/?jwt_password=${token}`
+			`${process.env.CLIENT_URL}/changepasword/?jwt_password=${token}`
 		)
 
 		return {login}
