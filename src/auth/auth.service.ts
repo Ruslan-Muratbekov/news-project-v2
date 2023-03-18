@@ -186,7 +186,7 @@ export class AuthService {
 
 	async responseProfile(user: ProfileUserDto): Promise<ProfileDto> {
 		const candidate = await this.profileRepository.findOne({where: {authId: user.id}})
-		if (!candidate.username && !candidate.first_name && !candidate.last_name) {
+		if (!candidate?.username && !candidate?.first_name && !candidate?.last_name) {
 			throw new HttpException('Профиль еще не создан!', HttpStatus.BAD_REQUEST)
 		}
 		return new ProfileDto(candidate)
@@ -194,13 +194,16 @@ export class AuthService {
 
 	async createProfile(user: ProfileUserDto, data: CreateProfileDto): Promise<CreateProfileDto> {
 		const candidate = await this.profileRepository.findOne({where: {authId: user.id}})
-		if (candidate.username && candidate.first_name && candidate.last_name) {
+		if (candidate !== null) {
 			throw new HttpException('Профиль уже создан создан!', HttpStatus.BAD_REQUEST)
 		}
-		candidate.username = data.username
-		candidate.first_name = data.first_name
-		candidate.last_name = data.last_name
-		await this.profileRepository.manager.save(candidate)
+		const profile = await this.profileRepository.create({
+			username: data.username,
+			first_name: data.first_name,
+			last_name: data.last_name,
+			authId: user.id
+		})
+		await this.profileRepository.manager.save(profile)
 		return data
 	}
 
