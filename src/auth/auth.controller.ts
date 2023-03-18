@@ -105,7 +105,6 @@ export class AuthController {
 	@ApiBody({type: UpdateProfileDto})
 	@ApiResponse({status: 200, type: UpdateProfileDto})
 	async updateProfile(@Req() req, @Body() data: UpdateProfileDto): Promise<UpdateProfileDto> {
-		console.log(req)
 		return this.authService.updateProfile(req.user, data)
 	}
 }
